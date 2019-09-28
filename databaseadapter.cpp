@@ -112,6 +112,35 @@ QString DatabaseAdapter::getOTypeFromNode(unsigned int node) const
     return "";
 }
 
+void DatabaseAdapter::createOTypeTable()
+{
+    QSet<QString> columns;
+    columns << "startNode" << "endNode" << "typeLabel";
+    QHash<QString, QString> columnTypes;
+    columnTypes["startNode"] = "int";
+    columnTypes["endNode"] = "int";
+    columnTypes["typeLabel"] = "text";
+
+    createTable( "otype", columns, columnTypes );
+
+    QSqlQuery q(QSqlDatabase::database(mFilename));
+    QString queryString("INSERT INTO otype (startNode, endNode, typeLabel) VALUES (:startNode,:endNode,:typeLabel);");
+    if( !q.prepare(queryString) ) {
+        qWarning() << "DatabaseAdapter::createOTypeTable" << q.lastError().text() << queryString;
+        return;
+    }
+
+    QHashIterator<QString,QPair<unsigned int,unsigned int>> i( mOTypeRanges );
+    while (i.hasNext()) {
+        i.next();
+        q.bindValue(":startNode", i.value().first);
+        q.bindValue(":endNode", i.value().second);
+        q.bindValue(":typeLabel",i.key());
+        if( !q.exec() )
+            qWarning() << "DatabaseAdapter::createOTypeTable" << q.lastError().text() << q.executedQuery();
+    }
+}
+
 void DatabaseAdapter::beginTransaction()
 {
     QSqlDatabase::database(mFilename).transaction();

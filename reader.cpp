@@ -70,6 +70,9 @@ void Reader::processOtypeFile()
 
 void Reader::createTables()
 {
+    /// NB: this able works differently from the others
+    mDb->createOTypeTable();
+
     /// first the node tables
     foreach( QString otype, mOTypeRanges.keys() ) { /// word, book, chapter, clause... etc. Each will be a different table.
         QSet<QString> node_columns;

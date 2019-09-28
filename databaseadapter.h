@@ -23,6 +23,8 @@ public:
     void setOtypeRanges(QHash<QString, QPair<unsigned int, unsigned int> > oTypeRanges);
     QString getOTypeFromNode(unsigned int node) const;
 
+    void createOTypeTable();
+
     void beginTransaction();
     void commitTransaction();
 
