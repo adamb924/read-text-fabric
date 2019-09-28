@@ -35,12 +35,10 @@ void Reader::loadData()
     /// create tables based on what was collected in the first pass
     createTables();
 
-    /*
     for(int i=0; i<mFiles.count(); i++) {
         qDebug() << mFiles.at(i).label();
         mFiles[i].addDataToDatabase(mDb);
     }
-    */
 }
 
 void Reader::processOtypeFile()
